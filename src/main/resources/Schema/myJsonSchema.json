@@ -1,0 +1,78 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CarDoc Schema",
+  "type": "object",
+  "definitions": {
+    "User": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "format": "uuid" },
+        "name": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "password": { "type": "string", "minLength": 8 },
+        "role": { "type": "string", "enum": ["CUSTOMER", "MECHANIC", "ADMIN"] },
+        "phone": { "type": "string" },
+        "address": { "$ref": "#/definitions/Address" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "name", "email", "password", "role", "createdAt"]
+    },
+    "Mechanic": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "format": "uuid" },
+        "userId": { "type": "string", "format": "uuid" },
+        "shopName": { "type": "string" },
+        "services": { "type": "array", "items": { "$ref": "#/definitions/Service" } },
+        "rating": { "type": "number", "minimum": 0, "maximum": 5 },
+        "location": { "$ref": "#/definitions/Address" }
+      },
+      "required": ["id", "userId", "shopName", "services", "rating"]
+    },
+    "Appointment": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "format": "uuid" },
+        "customerId": { "type": "string", "format": "uuid" },
+        "mechanicId": { "type": "string", "format": "uuid" },
+        "serviceId": { "type": "string", "format": "uuid" },
+        "dateTime": { "type": "string", "format": "date-time" },
+        "status": { "type": "string", "enum": ["PENDING", "CONFIRMED", "COMPLETED", "CANCELLED"] },
+        "notes": { "type": "string" }
+      },
+      "required": ["id", "customerId", "mechanicId", "serviceId", "dateTime", "status"]
+    },
+    "Service": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "format": "uuid" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "price": { "type": "number", "minimum": 0 }
+      },
+      "required": ["id", "name", "price"]
+    },
+    "Review": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "format": "uuid" },
+        "customerId": { "type": "string", "format": "uuid" },
+        "mechanicId": { "type": "string", "format": "uuid" },
+        "rating": { "type": "number", "minimum": 1, "maximum": 5 },
+        "comment": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "customerId", "mechanicId", "rating", "createdAt"]
+    },
+    "Address": {
+      "type": "object",
+      "properties": {
+        "street": { "type": "string" },
+        "city": { "type": "string" },
+        "state": { "type": "string" },
+        "zipCode": { "type": "string" }
+      },
+      "required": ["street", "city", "state", "zipCode"]
+    }
+  }
+}
